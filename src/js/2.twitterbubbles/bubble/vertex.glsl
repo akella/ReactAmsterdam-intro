@@ -24,12 +24,17 @@ varying float vReflectionFactor;
 
 varying vec3 eye;
 varying vec3 vNormal;
+varying vec2 vUv;
+varying float visible;
 // varying vec3 vPosition;
 
 attribute vec3 instancePosition;
 attribute float instanceOffset;
 attribute float instanceScale;
 attribute float instanceNoise;
+attribute float instanceVisible;
+attribute float instanceLife;
+attribute vec3 instanceTarget;
 
 
 vec3 getWaveHeight(vec3 pos, vec3 rCenter, float wH, float wF, float wL) {
@@ -68,8 +73,11 @@ vec3 getFinalPositionWithWave(vec3 pos,float time, float koef, float scaleCompen
 
 
 void main() {
+	vUv = uv;
+	visible = instanceVisible;
 
 	float currentScale = mix(0.01, instanceScale,scaleMain);
+	currentScale = 1.;
 	
 	float temp = time + 50.*instanceOffset;
 	// temp = 0.;
@@ -107,42 +115,17 @@ void main() {
 	    	v1 = finalPos0 - finalPos;
     	}
     }
-    // account for normals on the edfe @TODO
-    // if(abs(position.z)<0.5) {
-    //     float gap = 0.01;
-
-    //     if(position.y < 0.0) {
-    //         pos = getPosition(vec3(position.x, position.y+gap, position.z + 0.02));
-    //         p0  = getPosition(vec3(position.x+0.01, position.y+gap, position.z ));
-    //     } else {
-    //         pos = getPosition(vec3(position.x, position.y, position.z + 0.3));
-    //         p0  = getPosition(vec3(position.x+0.3, position.y, position.z + 0.02 ));
-    //     }
-
-    //     // pos = getPosition(vec3(position.x, position.y+gap, position.z +0.02));
-    //     // p0  = getPosition(vec3(position.x+0.01, position.y+gap, position.z));
-
-    //     vec3 newP = getFinalPosition(pos,time);
-    //     vec3 newP0 = getFinalPosition(p0,time);
-    //     v1 = newP0 - newP;
-    // } 
-    // end
-
 
 
 	vec3 vCross = cross(v0, v1);
 	
 
 	vec3 newposition = position;
-	// scale
 	finalPos *= currentScale;
-	//position
 	finalPos += instancePosition;
 
-
-	// move small balls in 
-	vec3 circleMove = vec3(sin(time/10. + instanceOffset*5.), cos(time/5. + instanceOffset*5.),0.);
-	finalPos += mix(circleMove*0.01, vec3(0.), instanceNoise);
+	finalPos = mix(finalPos,position + instanceTarget,instanceLife*instanceLife*instanceLife);
+	// finalPos.z = mix(finalPos.z, -100.,instanceLife);
 
 	vec4 mvPosition = modelViewMatrix * vec4( finalPos, 1.0 );
 

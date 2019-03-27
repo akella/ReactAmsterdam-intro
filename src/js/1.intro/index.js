@@ -21,7 +21,7 @@ export default function Intro() {
       texts.push([...e.querySelectorAll('span')]);
     });
     tl.set(elements, { perspective:700, transformStyle:'preserve-3d'});
-
+    tl.set('.animatedtext',{opacity:1});
     texts.forEach(t => {
     	// ease: Back.easeOut.config(1.7)
 	  	tl.staggerFromTo(t, animTime, { rotationX: -90,opacity:0 }, { rotationX: 0, transformOrigin: tOrigin,opacity:1 }, delay);

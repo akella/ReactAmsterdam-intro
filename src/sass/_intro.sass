@@ -1,4 +1,4 @@
-.intro
+.animatedtext
 	text-align: center
 	position: absolute
 	left: 0
@@ -9,6 +9,9 @@
 	justify-content: center
 	align-items: center
 	font-size: 7vw 
+	opacity: 0 
+	&.firsttweet
+		font-size: 10vw 
 	li
 		position: absolute
 		left: 0
@@ -21,4 +24,6 @@
 	span
 		display: inline-block
 		min-width: .25em 
-		opacity: 0 
+		// opacity: 0 
+		backface-visibility: hidden
+	div
