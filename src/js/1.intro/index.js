@@ -22,9 +22,11 @@ export default function Intro() {
     });
     tl.set(elements, { perspective:700, transformStyle:'preserve-3d'});
     tl.set('.animatedtext',{opacity:1});
-    texts.forEach(t => {
+    let dedelay = undefined;
+    texts.forEach((t,i) => {
     	// ease: Back.easeOut.config(1.7)
-	  	tl.staggerFromTo(t, animTime, { rotationX: -90,opacity:0 }, { rotationX: 0, transformOrigin: tOrigin,opacity:1 }, delay);
+      if(i===texts.length-1) {dedelay = '-=1.2';} else{dedelay = undefined;}
+	  	tl.staggerFromTo(t, animTime, { rotationX: -90,opacity:0 }, { rotationX: 0, transformOrigin: tOrigin,opacity:1 }, delay,dedelay);
 	  	tl.staggerTo(t, animTime*1.2, { rotationX: 45, transformOrigin: tOrigin,opacity:0,ease: Power2.easeOut }, delay/2);
     });
   

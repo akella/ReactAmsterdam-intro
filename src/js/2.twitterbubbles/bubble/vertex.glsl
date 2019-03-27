@@ -26,6 +26,7 @@ varying vec3 eye;
 varying vec3 vNormal;
 varying vec2 vUv;
 varying float visible;
+varying float smile;
 // varying vec3 vPosition;
 
 attribute vec3 instancePosition;
@@ -35,6 +36,7 @@ attribute float instanceNoise;
 attribute float instanceVisible;
 attribute float instanceLife;
 attribute vec3 instanceTarget;
+attribute float instanceSmile;
 
 
 vec3 getWaveHeight(vec3 pos, vec3 rCenter, float wH, float wF, float wL) {
@@ -74,6 +76,7 @@ vec3 getFinalPositionWithWave(vec3 pos,float time, float koef, float scaleCompen
 
 void main() {
 	vUv = uv;
+	smile = instanceSmile;
 	visible = instanceVisible;
 
 	float currentScale = mix(0.01, instanceScale,scaleMain);

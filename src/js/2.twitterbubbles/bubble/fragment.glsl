@@ -28,6 +28,9 @@ vec3 contrast(vec3 mValue, float mScale) {
 uniform samplerCube tCube;
 uniform sampler2D tMatCap;
 uniform sampler2D tSmile;
+uniform sampler2D tSmile1;
+uniform sampler2D tSmile2;
+uniform sampler2D tSmile3;
 uniform float smileProgress;
 uniform float startProgress;
 varying vec3 vReflect;
@@ -39,9 +42,12 @@ varying vec3 vNormal;
 varying vec3 vPosition;
 varying float visible;
 varying vec2 vUv;
+varying float smile;
 
 void main() {
 
+	
+	
 
 	if(visible<0.5) discard;
 	// matcap calc
@@ -50,8 +56,19 @@ void main() {
 	vec2 vN = r.xy / m + .5;
 	vec3 base = texture2D( tMatCap, vN ).rgb;
 	// end matcap
+// 
+	vec2 vUv1 = 1.5*vUv*vec2(4.,6. - 4.*smileProgress) - 2.*vec2(0.5,0.5);
+	// vec4 smi = texture2D(tSmile, vUv1);
 
-	vec4 smi = texture2D(tSmile, vUv*vec2(4.,6. - 4.*smileProgress) - vec2(0.5,0.5));
+	vec4 smi;
+	vec3 col;
+	if(smile<3.5) {smi = texture2D(tSmile3, vUv1); col=vec3(0.,0.,1.);}
+	if(smile<2.5) {smi = texture2D(tSmile2, vUv1); col=vec3(1.,0.,1.);}
+	if(smile<1.5) {smi = texture2D(tSmile1, vUv1); col=vec3(1.,1.,0.);}
+	if(smile<0.5) {smi = texture2D(tSmile, vUv1); col=vec3(1.,0.,0.);}
+	
+	
+	
 
 
 	// fresnel = reflect + refract

@@ -2,7 +2,8 @@ uniform float time;
 uniform float scale;
 
 uniform float progress;
-
+uniform float reveal;
+varying float rProgress;
 
 uniform sampler2D texture1;
 uniform sampler2D texture2;
@@ -81,11 +82,19 @@ float easeInOutQuint(float t){
 
 
 void main() {
+
+
+  // vUv = uv;
+  vec2 _uv = uv - 0.5;
+  vUv = _uv;
+  vUv *= vec2(1.,1.77);
+
+  vUv += 0.5;
   // vColor = offset;
   vNormal = normal;
   vColor = instanceColor;
   // offset = instanceOffset;
-    vUv = uv;
+    // vUv = uv;
     vPosition = position.xyz;
     
     vec3 newposition = position;
@@ -113,20 +122,24 @@ void main() {
     vProgress = 0.;
     for(int i=0; i<10; i++) {
         wave += getWaveHeight(position,wPosition[i],wHeight[i],wTime[i],wLength[i]);
-
     }
 
-     // newposition.z  = position.z + wave*(1. + offset/2.);
+    rProgress = reveal;
+    rProgress = smoothstep(0.1,0.0, length(vec2(0.,0.) - position.xy)/100. - reveal*1.41 + 0.1 + offset/15.);
+    // rProgress = smoothstep(1.,0.9,rProgress);
+     newposition.z  = position.z + wave*sin(rProgress*3.1415926);
      // vProgress += step(length(wPosition[0] - position), 2.*wTime[0]);
      dProgress = smoothstep(0.1,0., length(wPosition[0] - position) - progress*1.41 + 0.1 + offset/15.);
      // dProgress = length(wPosition[0] - position);
      dProgress = wave;
 
-     // newposition = rotate(position - centroid,vec3(1.,1.,0.),dProgress*3.1415926*2.) + centroid;
-     newposition.z =  newposition.z + (0.5 + offset)*sin(dProgress*3.14)/3.;
+     newposition = rotate(position - centroid,vec3(1.,1.,0.),rProgress*3.1415926*2.) + centroid;
+     newposition.z =  newposition.z + (0.5 + offset)*sin(dProgress*3.1415926)/3. + 10.*(0.5+offset)*sin(rProgress*3.1415926); 
      // add scale to rotated
      
     vProgress = wave;
+
+
   // newposition.z = sin(3.14*tProgress)/10.;
   // position+ move
   // newposition = bezier4(newposition, controlpoint1, controlpoint2, shifted, tProgress);

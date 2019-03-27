@@ -55,6 +55,7 @@ class Sketch {
     this.time = 0;
     this.paused = true;
     this.currentWave = 0;
+    this.smiles = [];
     this.handles = [];
     this.currentNumber = 0;
     this.maximum = 10;
@@ -66,14 +67,20 @@ class Sketch {
     let promises = [
       this.setupcubeTexture(),
       this.loadMatCap(),
-      this.loadSmile(),
+      this.loadSmile('img/smiles/1.png'),
+      this.loadSmile('img/smiles/2.png'),
+      this.loadSmile('img/smiles/3.png'),
+      this.loadSmile('img/smiles/4.png'),
+      this.loadSmile('img/smiles/5.png'),
       this.loadFont()
     ];
 
     Promise.all(promises).then(() => {
       this.addBubble();
       this.addWall();
+      this.prepareVideo();
       this.animate();
+
       // this.text();
       // this.punch();
       cb();
@@ -150,20 +157,20 @@ class Sketch {
 
     geometry.computeBoundingBox();
     let mesh = new THREE.Mesh(geometry, material);
-    let k = 0.01;
+    let k = 0.008;
     mesh.scale.y = -k;
     mesh.scale.x = k;
     mesh.scale.z = k;
     mesh.position.x = 0;
     mesh.position.z = 0;
-    mesh.position.y = 135;
+    mesh.position.y = 165;
 
 
     // move under ball
     let gg = mesh.geometry.attributes.position;
     for (let i = 0; i < gg.array.length; i = i + 2) {
       gg.array[i] += -geometry.boundingBox.max.x / 2;
-      gg.array[i + 1] += 135;
+      gg.array[i + 1] += 165;
     }
 
     return mesh;
@@ -173,7 +180,9 @@ class Sketch {
     // @todo cut geometry to change number of dots
     let that = this;
     this.settings = {
+      revealVideo: 0,
       waveIndex: 0,
+      nickname: '@username',
       uDensity: 40,
       time: 0,
       amplitude: 1,
@@ -199,11 +208,12 @@ class Sketch {
       }
     };
 
-    // this.gui = new dat.GUI();
+    this.gui = new dat.GUI();
     // this.gui.add(this.settings, 'startProgress', 0,1, 0.01);
     // this.gui.add(this.settings, 'addTweet');
     // this.gui.add(this.settings, 'Punch');
-    // this.gui.add(this.settings, 'smileProgress',0,1,0.01);
+    this.gui.add(this.settings, 'revealVideo',0,1,0.01);
+    this.gui.add(this.settings, 'nickname');
   }
 
   setupcubeTexture() {
@@ -232,12 +242,13 @@ class Sketch {
     });
   }
 
-  loadSmile() {
+  loadSmile(url) {
     let that = this;
     return new Promise(resolve => {
-      that.smile = new THREE.TextureLoader().load('img/smile.png', resolve);
-      that.smile.magFilter = THREE.NearestFilter;
-      that.smile.minFilter = THREE.NearestFilter;
+      let smile = new THREE.TextureLoader().load(url, resolve);
+      smile.magFilter = THREE.NearestFilter;
+      smile.minFilter = THREE.NearestFilter;
+      that.smiles.push(smile);
     });
   }
 
@@ -245,6 +256,7 @@ class Sketch {
     let visible = this.instancedGeometry.attributes.instanceVisible.array;
     let position = this.instancedGeometry.attributes.instancePosition.array;
     let target = this.instancedGeometry.attributes.instanceTarget.array;
+    let smile = this.instancedGeometry.attributes.instanceSmile.array;
 
     this.currentBubbleIndex++;
     // visib
@@ -272,13 +284,16 @@ class Sketch {
     target[this.currentBubbleIndex * 3 + 1] = yy1 * 7 ;
     target[this.currentBubbleIndex * 3 + 2] = -this.z;
 
+    smile[this.currentBubbleIndex ] = Math.floor(Math.random()*3.9);
+    console.log(smile);
 
     this.instancedGeometry.attributes.instancePosition.needsUpdate = true;
     this.instancedGeometry.attributes.instanceVisible.needsUpdate = true;
     this.instancedGeometry.attributes.instanceTarget.needsUpdate = true;
+    this.instancedGeometry.attributes.instanceSmile.needsUpdate = true;
 
     // add text
-    let textMesh = this.getText('@username');
+    let textMesh = this.getText(this.settings.nickname);
     this.handles.push(textMesh);
     this.scene.add(textMesh);
   }
@@ -293,6 +308,7 @@ class Sketch {
     let instanceVisible = [];
     let instanceTarget = [];
     let instanceLife = [];
+    let instanceSmile = [];
 
     let bubgeo = b.geometry;
 
@@ -303,6 +319,7 @@ class Sketch {
     instanceNoise = new Float32Array(max);
     instanceVisible = new Float32Array(max);
     instanceLife = new Float32Array(max);
+    instanceSmile= new Float32Array(max);
 
     // adding one first bubble
     // positions
@@ -362,20 +379,27 @@ class Sketch {
       'instanceTarget',
       new THREE.InstancedBufferAttribute(new Float32Array(instanceTarget), 3)
     );
+    this.instancedGeometry.addAttribute(
+      'instanceSmile',
+      new THREE.InstancedBufferAttribute(new Float32Array(instanceSmile), 1)
+    );
 
     this.instancedMesh = new THREE.Mesh(this.instancedGeometry, b.material);
     // this.instancedMesh = new Mesh( this.instancedGeometry, new MeshBasicMaterial({color:0xff0000}) );
     this.instancedMesh.frustumCulled = false;
     this.instancedMesh.material.uniforms['tCube'].value = this.textureCube1;
     this.instancedMesh.material.uniforms['tMatCap'].value = this.matcap;
-    this.instancedMesh.material.uniforms['tSmile'].value = this.smile;
+    this.instancedMesh.material.uniforms['tSmile'].value = this.smiles[3];
+    this.instancedMesh.material.uniforms['tSmile1'].value = this.smiles[1];
+    this.instancedMesh.material.uniforms['tSmile2'].value = this.smiles[2];
+    this.instancedMesh.material.uniforms['tSmile3'].value = this.smiles[3];
     this.scene.add(this.instancedMesh);
 
 
-    setTimeout(() => {
-      // shoud be in start by promise
-      // this.animateFirst();
-    },1500);
+    // setTimeout(() => {
+    //   // shoud be in start by promise
+    //   // this.animateFirst();
+    // },1500);
     
 
     // debug
@@ -399,14 +423,14 @@ class Sketch {
     let firstusername = this.getText('@first_name');
     this.handles.push(firstusername);
     this.scene.add(firstusername);
-    firstusername.position.copy(new THREE.Vector3(0,-0.5,-4));
+    firstusername.position.copy(new THREE.Vector3(0,-1.5,-4.6));
 
     // move ball into vision from far
     tl.to(state, 2, {
       o:1,
       onUpdate: () => {
         pos.array[1] = lerp(25,0, easeOutBack(state.o));
-        pos.array[2] = lerp(-50,-4, easeOutQuad(state.o));
+        pos.array[2] = lerp(-50,-4.6, easeOutQuad(state.o));
         pos.needsUpdate = true;
       }
     });
@@ -428,6 +452,28 @@ class Sketch {
     this.twitteranimated = true;
 
     // enable listener for sockets here
+  }
+
+  prepareVideo() {
+    this.video = document.getElementById( 'video' );
+
+    this.videotexture = new THREE.VideoTexture( this.video );
+    this.videotexture.minFilter = THREE.LinearFilter;
+    this.videotexture.magFilter = THREE.LinearFilter;
+    this.videotexture.format = THREE.RGBFormat;
+
+    this.wall.material.uniforms.texture.value = this.videotexture;
+
+
+  }
+  runVideo() {
+    // alert('run video');
+    this.video.play();
+    let tl = new TimelineMax();
+    tl.to(this.settings,4,{revealVideo:0.5});
+    // run uniform to reveal surface
+
+    // run play on video 
   }
 
   render() {
@@ -454,6 +500,9 @@ class Sketch {
 
     this.settings.time += 0.05;
 
+    if(this.wall) {
+      this.wall.material.uniforms.reveal.value = this.settings.revealVideo;
+    }
     // bubble
     if (this.instancedMesh) {
       this.instancedMesh.material.uniforms.time.value = this.settings.time;
@@ -480,6 +529,7 @@ class Sketch {
               this.currentNumber++;
               console.log(this.currentNumber);
               if(this.currentNumber>this.maximum-1) {
+                console.log(this.onFinish);
                 if(this.onFinish) this.onFinish();
               }
               if (this.handles[i]) this.kill(this.handles[i]);

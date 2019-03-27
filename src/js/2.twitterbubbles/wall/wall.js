@@ -97,25 +97,25 @@ export default class Wall {
     for (let i = 0; i < positions.length; i = i + 3) {
       let rand = Math.random();
       let centroidX =
-        (positions[i][0] / can.width +
+        scale*(positions[i][0] / can.width +
           positions[i + 1][0] / can.width +
           positions[i + 2][0] / can.width) /
         3;
       let centroidY =
-        (positions[i][1] / can.height +
+        scale*(positions[i][1] / can.height +
           positions[i + 1][1] / can.height +
           positions[i + 2][1] / can.height) /
         3;
       centroids.push(
         centroidX,
         centroidY,
-        0,
+        -50,
         centroidX,
         centroidY,
-        0,
+        -50,
         centroidX,
         centroidY,
-        0
+        -50
       );
       offsets.push(rand, rand + 0.02, rand + 0.02);
       offsets1.push(rand, rand, rand);
@@ -162,11 +162,16 @@ export default class Wall {
         time: { type: 'f', value: 0 },
         scale: { type: 'f', value: 0 },
         progress: { type: 'f', value: 0 },
+        reveal: { type: 'f', value: 0 },
         offset: { type: 'f', value: 0 },
         vortex: { type: 'i', value: 0 },
         texture: {
           type: 't',
           value: new THREE.TextureLoader().load('img/video.jpg')
+        },
+        texture1: {
+          type: 't',
+          value: new THREE.TextureLoader().load('img/bg.jpg')
         },
         // texture1: {type: 't', value: new THREE.TextureLoader().load('img/2.png')},
         // texture2: {type: 't', value: new THREE.TextureLoader().load('img/1.png')},
@@ -192,7 +197,7 @@ export default class Wall {
   }
 
   punch(p) {
-  	console.log(p);
+  	// console.log(p);
   	let material = this.material;
   	let waveIndex = this.currentWave;
   	material.uniforms.wPosition.value[waveIndex] = new THREE.Vector3(p.x,p.y,this.z);

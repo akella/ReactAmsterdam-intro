@@ -31,3 +31,5 @@ nbproject
 _tmp
 node_modules
 bower_components
+build/video/1.mp4
+src/video/1.mp4

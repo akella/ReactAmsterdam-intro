@@ -15,26 +15,25 @@ let fontLoad = font.load();
 // video?
 Promise.all([fontLoad])
   .then(responses => {
-    // console.log('All assets are loaded');
+    console.log('All assets are loaded');
     let twitter = new Twitter(() => {
       document.body.classList.add('is-loaded');
-      // MAKE DELAY HERE BEFORE prese
       setTimeout(() => {
         Intro().then(() => {
           twitter.playTwitterPart().then(() => {
-            alert('run video appear');
+            console.log('RUN VIDEO!!');
           });
         });
       }, 1500);
     });
-    // $('.intro').hide();
-    
 
 
-    // Twitter().then(() => {
-    // 	// after tweets gathered
-    // 	alert('run final video appear');
+    // let twitter = new Twitter(() => {
+    //   twitter.playTwitterPart().then(() => {
+    //     console.log('RUN VIDEO!!');
+    //   });
     // });
+
   }) 
   .catch(error => {
     console.log(error);

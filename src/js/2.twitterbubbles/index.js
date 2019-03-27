@@ -43,8 +43,12 @@ export default class twitterbubbles {
     let that = this;
     return new Promise(function(resolve) {
       that.bb.play();
-      setTimeout(() => {that.bb.animateFirst();},2000);
-      
+      setTimeout(() => {that.bb.animateFirst();},1000);
+      that.bb.onFinish = () => {
+        that.bb.runVideo();
+        resolve();
+      };
+      // console.log( resolve, that.bb.onFinish,'API');
       // let bb = new Bubbles(
       //   'container',
       // );
@@ -66,7 +70,7 @@ export default class twitterbubbles {
       socket.on('stream', function(tweet) {
         // TWEET HAPPENED
         console.log('tweet',tweet.name, tweet.username);
-        // addBubble;
+        // addBubble here;
       });
 
 

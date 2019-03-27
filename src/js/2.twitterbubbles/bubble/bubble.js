@@ -43,6 +43,9 @@ let uniforms = {
   'tCube': { value: null },
   'tMatCap': { value: null },
   'tSmile': { value: null },
+  'tSmile1': { value: null },
+  'tSmile2': { value: null },
+  'tSmile3': { value: null },
   'smileProgress': { value: 0.5 },
 };
 
