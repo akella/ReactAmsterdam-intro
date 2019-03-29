@@ -46,7 +46,7 @@ class Sketch {
       50,
       this.container.offsetWidth / this.container.offsetHeight,
       0.001,
-      1000
+      100
     );
     this.camera.position.set(0, 0, -1);
     this.camera.lookAt(0, 0, -50);
@@ -58,7 +58,7 @@ class Sketch {
     this.smiles = [];
     this.handles = [];
     this.currentNumber = 0;
-    this.maximum = 10;
+    this.maximum = 200;
     
   }
 
@@ -201,7 +201,7 @@ class Sketch {
       offset1: 0.1,
       smileProgress: 0,
       addTweet: () => {
-        this.addNewBubble();
+        this.addNewBubble(this.settings.nickname);
       },
       Punch: () => {
         this.punchWall(new THREE.Vector3(0,0,that.z));
@@ -252,7 +252,7 @@ class Sketch {
     });
   }
 
-  addNewBubble() {
+  addNewBubble(nickname) {
     let visible = this.instancedGeometry.attributes.instanceVisible.array;
     let position = this.instancedGeometry.attributes.instancePosition.array;
     let target = this.instancedGeometry.attributes.instanceTarget.array;
@@ -293,7 +293,7 @@ class Sketch {
     this.instancedGeometry.attributes.instanceSmile.needsUpdate = true;
 
     // add text
-    let textMesh = this.getText(this.settings.nickname);
+    let textMesh = this.getText(nickname);
     this.handles.push(textMesh);
     this.scene.add(textMesh);
   }

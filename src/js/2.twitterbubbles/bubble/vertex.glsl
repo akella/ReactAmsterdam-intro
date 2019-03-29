@@ -99,25 +99,25 @@ void main() {
     vec3 v1 = finalPos1 - finalPos;
 
 
-    if(position.z<0.01 && abs(position.x)>0.01){
-    	vec3 p2,p3;
-    	if(position.x<0.01){
-			p2  = getPosition(vec3(position.x, position.y, position.z));
-			p3  = getPosition(vec3(position.x, position.y -minigap*3., position.z - minigap*3.));
-		} else{
-			p2  = getPosition(vec3(position.x, position.y, position.z));
-			p3  = getPosition(vec3(position.x + minigap, position.y -minigap, position.z + minigap));
-		}
+  //   if(position.z<0.01 && abs(position.x)>0.01){
+  //   	vec3 p2,p3;
+  //   	// if(position.x<0.01){
+		// 	p2  = getPosition(vec3(position.x, position.y, position.z));
+		// 	p3  = getPosition(vec3(position.x, position.y -minigap*3., position.z - minigap*3.));
+		// // } else{
+		// // 	p2  = getPosition(vec3(position.x, position.y, position.z));
+		// // 	p3  = getPosition(vec3(position.x + minigap, position.y -minigap, position.z + minigap));
+		// // }
     	
-	    vec3 newp = getFinalPositionWithWave(p2,temp,instanceNoise,currentScale,noiseScale);
-	    vec3 newp0 = getFinalPositionWithWave(p3,temp,instanceNoise,currentScale,noiseScale);
-	    v0 = newp - newp0;
-    } else{
-    	if(position.z<0.01 && abs(position.x)<0.01){
-	    	v0 = finalPos1 - finalPos;
-	    	v1 = finalPos0 - finalPos;
-    	}
-    }
+	 //    vec3 newp = getFinalPositionWithWave(p2,temp,instanceNoise,currentScale,noiseScale);
+	 //    vec3 newp0 = getFinalPositionWithWave(p3,temp,instanceNoise,currentScale,noiseScale);
+	 //    v0 = newp - newp0;
+  //   } else{
+  //   	// if(position.z<0.01 && abs(position.x)<0.01){
+	 //    // 	v0 = finalPos1 - finalPos;
+	 //    // 	v1 = finalPos0 - finalPos;
+  //   	// }
+  //   }
 
 
 	vec3 vCross = cross(v0, v1);

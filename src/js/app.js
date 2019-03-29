@@ -15,16 +15,26 @@ let fontLoad = font.load();
 // video?
 Promise.all([fontLoad])
   .then(responses => {
-    console.log('All assets are loaded');
+    // console.log('All assets are loaded');
+    // let twitter = new Twitter(() => {
+    //   document.body.classList.add('is-loaded');
+    //   setTimeout(() => {
+    //     Intro().then(() => {
+    //       twitter.playTwitterPart().then(() => {
+    //         console.log('RUN VIDEO!!');
+    //       });
+    //     });
+    //   }, 1500);
+    // });
+
+
+
     let twitter = new Twitter(() => {
-      document.body.classList.add('is-loaded');
-      setTimeout(() => {
-        Intro().then(() => {
-          twitter.playTwitterPart().then(() => {
-            console.log('RUN VIDEO!!');
-          });
-        });
-      }, 1500);
+
+      twitter.playTwitterPart().then(() => {
+        console.log('RUN VIDEO!!');
+      });
+
     });
 
 

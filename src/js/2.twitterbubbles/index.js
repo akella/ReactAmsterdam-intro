@@ -35,7 +35,7 @@ export default class twitterbubbles {
   }
 
   addTweet() {
-    this.bb.addNewBubble();
+    this.bb.addNewBubble('@random');
     this.current++;
   }
 
@@ -65,11 +65,12 @@ export default class twitterbubbles {
       // at the end, run socket listener
 
       let socket = io('http://localhost:5000'); // Change to the host and node port
-      socket.emit('hash', {hash:'saturdaymorning'});
+      socket.emit('hash', {hash:'PersonaChallenge'});
 
       socket.on('stream', function(tweet) {
         // TWEET HAPPENED
-        console.log('tweet',tweet.name, tweet.username);
+        that.bb.addNewBubble('@'+tweet.username);
+        // console.log('tweet',tweet.name, tweet.username);
         // addBubble here;
       });
 
