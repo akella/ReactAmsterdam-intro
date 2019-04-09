@@ -19,7 +19,7 @@ var twitter = new Twit({
 
 
 // attach to stream using trends as track parameters
-var tweetStream = twitter.stream('statuses/filter', { track: 'saturdaymorning' });
+// var tweetStream = twitter.stream('statuses/filter', { track: 'saturdaymorning' });
 
 io.sockets.on('connection', function (socket) {
   console.log('Socket.io connected');
@@ -27,7 +27,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('hash', function(hash){
     var streamHash = hash.hash;
     var stream = twitter.stream('statuses/filter', { track: streamHash });
-
+    console.log('hash connected:' + streamHash);
     stream.on('tweet', function (tweet) {
     	console.log('---');
     	console.log('screen_name:', tweet.user.screen_name);

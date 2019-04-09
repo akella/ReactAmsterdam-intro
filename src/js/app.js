@@ -6,6 +6,8 @@ import FontFaceObserver from 'FontFaceObserver';
 var font = new FontFaceObserver('lato');
 let fontLoad = font.load();
 
+let started = false;
+
 // @todo all the other assets as well go here
 // Smiles
 // Cubetexture
@@ -15,6 +17,9 @@ let fontLoad = font.load();
 // video?
 Promise.all([fontLoad])
   .then(responses => {
+
+
+
     // console.log('All assets are loaded');
     // let twitter = new Twitter(() => {
     //   document.body.classList.add('is-loaded');
@@ -29,13 +34,36 @@ Promise.all([fontLoad])
 
 
 
-    let twitter = new Twitter(() => {
+    document.body.onkeyup = function(e) {
+      if(e.keyCode === 32) {
+        if(started) return;
+        started = true;
 
-      twitter.playTwitterPart().then(() => {
-        console.log('RUN VIDEO!!');
-      });
 
-    });
+        let twitter = new Twitter(() => {
+          document.body.classList.add('is-loaded');
+          setTimeout(() => {
+            Intro().then(() => {
+              twitter.playTwitterPart().then(() => {
+                console.log('RUN VIDEO!!');
+              });
+            });
+          }, 1500);
+        });
+
+        // let twitter = new Twitter(() => {
+
+        //   twitter.playTwitterPart().then(() => {
+        //     console.log('RUN VIDEO!!');
+        //   });
+
+        // });
+
+
+        
+      }
+    };
+    
 
 
     // let twitter = new Twitter(() => {

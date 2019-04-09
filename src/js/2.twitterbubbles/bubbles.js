@@ -11,6 +11,8 @@ import * as dat from 'dat.gui';
 import b from './bubble/bubble.js';
 import Wall from './wall/wall.js';
 
+import {Howl, Howler} from 'howler';
+
 var OrbitControls = require('three-orbit-controls')(THREE);
 function lerp(v0, v1, t) {
   return v0 * (1 - t) + v1 * t;
@@ -38,6 +40,7 @@ class Sketch {
     );
     this.renderer.setClearColor(0x151515, 1);
     this.renderer.setClearColor(0xeeeeee, 1);
+    this.tweetPlease = document.getElementById('tweetplease');
     this.z = 50;
 
     this.container.appendChild(this.renderer.domElement);
@@ -58,7 +61,22 @@ class Sketch {
     this.smiles = [];
     this.handles = [];
     this.currentNumber = 0;
-    this.maximum = 200;
+    this.maximum = 10;
+
+    this.newBubbleSound = new Howl({
+      src: ['/sounds/newbubble.wav']
+    });
+
+    this.hitSound = new Howl({
+      src: ['/sounds/hit.wav']
+    });
+
+    this.bgSound = new Howl({
+      src: ['/sounds/bg.mp3'],
+      volume: 0.3,
+      loop: true
+    });
+
     
   }
 
@@ -253,12 +271,15 @@ class Sketch {
   }
 
   addNewBubble(nickname) {
+    // console.log(this.currentBubbleIndex, this.maximum);
+    if(this.currentBubbleIndex > this.maximum) {return;}
     let visible = this.instancedGeometry.attributes.instanceVisible.array;
     let position = this.instancedGeometry.attributes.instancePosition.array;
     let target = this.instancedGeometry.attributes.instanceTarget.array;
     let smile = this.instancedGeometry.attributes.instanceSmile.array;
 
     this.currentBubbleIndex++;
+
     // visib
     visible[this.currentBubbleIndex] = 1;
     //pos
@@ -296,6 +317,7 @@ class Sketch {
     let textMesh = this.getText(nickname);
     this.handles.push(textMesh);
     this.scene.add(textMesh);
+    this.newBubbleSound.play();
   }
 
   addBubble() {
@@ -394,6 +416,7 @@ class Sketch {
     this.instancedMesh.material.uniforms['tSmile2'].value = this.smiles[2];
     this.instancedMesh.material.uniforms['tSmile3'].value = this.smiles[3];
     this.scene.add(this.instancedMesh);
+    
 
 
     // setTimeout(() => {
@@ -420,7 +443,7 @@ class Sketch {
     // let target = {y:0,z:-4};
 
     // create text handle
-    let firstusername = this.getText('@first_name');
+    let firstusername = this.getText('@pixelscommander');
     this.handles.push(firstusername);
     this.scene.add(firstusername);
     firstusername.position.copy(new THREE.Vector3(0,-1.5,-4.6));
@@ -444,6 +467,7 @@ class Sketch {
 
         onComplete: () => {this.startTwitterIntegration();}
       },'-=0.5');
+    tl.fromTo(this.tweetPlease, 1, {y:-200,opacity:0},{y:0,opacity:1},0);
 
   }
 
@@ -451,7 +475,22 @@ class Sketch {
 
     this.twitteranimated = true;
 
+    // this.bgmusic = this.bgSound.play();
+    this.bgSound.volume(0.3);
+    // this.bgSound.fade(0, 1, 2000, this.bgmusic);
+
     // enable listener for sockets here
+  }
+
+  stopTwitterIntegration() {
+    this.twitteranimated = false;
+    // let tl = new TimelineMax();
+    // tl.fromTo(this.tweetPlease, 1, {y:0,opacity:1},{y:-200,opacity:0},0);
+
+
+    // this.bgmusic = this.bgSound.play();
+    // this.bgSound.volume(0.3);
+    // this.bgSound.fade(0.3,0,1000);
   }
 
   prepareVideo() {
@@ -468,9 +507,12 @@ class Sketch {
   }
   runVideo() {
     // alert('run video');
+
     this.video.play();
     let tl = new TimelineMax();
-    tl.to(this.settings,4,{revealVideo:0.5});
+    // let tl = new TimelineMax();
+    tl.fromTo(this.tweetPlease, 1, {y:0,opacity:1},{y:-200,opacity:0,scale: 0.6},0);
+    tl.to(this.settings,4,{revealVideo:0.5},0);
     // run uniform to reveal surface
 
     // run play on video 
@@ -527,9 +569,11 @@ class Sketch {
               visible.array[i] = 0;
               visibilityUpdate = true;
               this.currentNumber++;
+              this.hitSound.play();
               console.log(this.currentNumber);
               if(this.currentNumber>this.maximum-1) {
                 console.log(this.onFinish);
+                this.stopTwitterIntegration();
                 if(this.onFinish) this.onFinish();
               }
               if (this.handles[i]) this.kill(this.handles[i]);
