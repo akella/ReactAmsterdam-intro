@@ -61,18 +61,18 @@ class Sketch {
     this.smiles = [];
     this.handles = [];
     this.currentNumber = 0;
-    this.maximum = 10;
+    this.maximum = 50;
 
     this.newBubbleSound = new Howl({
-      src: ['/sounds/newbubble.wav']
+      src: ['sounds/newbubble.wav']
     });
 
     this.hitSound = new Howl({
-      src: ['/sounds/hit.wav']
+      src: ['sounds/hit.wav']
     });
 
     this.bgSound = new Howl({
-      src: ['/sounds/bg.mp3'],
+      src: ['sounds/bg.mp3'],
       volume: 0.3,
       loop: true
     });
@@ -226,12 +226,12 @@ class Sketch {
       }
     };
 
-    this.gui = new dat.GUI();
+    // this.gui = new dat.GUI();
     // this.gui.add(this.settings, 'startProgress', 0,1, 0.01);
     // this.gui.add(this.settings, 'addTweet');
     // this.gui.add(this.settings, 'Punch');
-    this.gui.add(this.settings, 'revealVideo',0,1,0.01);
-    this.gui.add(this.settings, 'nickname');
+    // this.gui.add(this.settings, 'revealVideo',0,1,0.01);
+    // this.gui.add(this.settings, 'nickname');
   }
 
   setupcubeTexture() {

@@ -4,7 +4,7 @@ import * as dat from 'dat.gui';
 import {Howl, Howler} from 'howler';
 
 const bgSound = new Howl({
-  src: ['/sounds/bg.mp3'],
+  src: ['sounds/bg.mp3'],
   volume: 0.3,
   loop: true
 });
@@ -22,6 +22,58 @@ export default class twitterbubbles {
       callback();
     });
     bgSound.play();
+    this.randomNames = [
+      'pixelscommander',
+      'operatino',
+      'akella',
+      'loveiko',
+      'okonetchnikov',
+      'denysdovhan',
+      'thekitze',
+      'pauloportella_',
+      'ReactAmsterdam',
+      'TejasKumar_',
+      'CrystallizeAPI',
+      'grabbou',
+      'ivanbuncic',
+      'iamsapegin',
+      'carlbergenhem',
+      'cvaneenige',
+      'deutschevita',
+      'briljantmartijn',
+      '4nduril',
+      'httpJunkie',
+      'elibelly',
+      'blv_dmitry',
+      'danielbayerlein',
+      'kentcdodds',
+      'ManuelBieh',
+      'pixelscommander',
+      'operatino',
+      'akella',
+      'loveiko',
+      'okonetchnikov',
+      'denysdovhan',
+      'thekitze',
+      'pauloportella_',
+      'ReactAmsterdam',
+      'TejasKumar_',
+      'CrystallizeAPI',
+      'grabbou',
+      'ivanbuncic',
+      'iamsapegin',
+      'carlbergenhem',
+      'cvaneenige',
+      'deutschevita',
+      'briljantmartijn',
+      '4nduril',
+      'httpJunkie',
+      'elibelly',
+      'blv_dmitry',
+      'danielbayerlein',
+      'kentcdodds',
+      'ManuelBieh',
+    ];
   }
 
   settings() {
@@ -35,22 +87,19 @@ export default class twitterbubbles {
       }
     };
 
-    this.gui = new dat.GUI();
+    // this.gui = new dat.GUI();
     // this.gui.add(this.settings, 'startProgress', 0,1, 0.01);
-    this.gui.add(this.settings, 'addTweet');
-    this.gui.add(this.settings, 'Punch');
+    // this.gui.add(this.settings, 'addTweet');
+    // this.gui.add(this.settings, 'Punch');
   }
 
   addTweet() {
-    let randomNames = [
-      'akella',
-      'pixelscommander',
-      'loveiko',
-    ];
+    
 
-    let random = Math.floor(randomNames.length*Math.random());
+    // let random = Math.floor(randomNames.length*Math.random());
+    let random = this.randomNames.shift();
 
-    this.bb.addNewBubble('@'+randomNames[random]);
+    this.bb.addNewBubble('@'+random);
     this.current++;
   }
 
@@ -60,7 +109,8 @@ export default class twitterbubbles {
       that.bb.play();
       setTimeout(() => {that.bb.animateFirst();},1000);
       that.bb.onFinish = () => {
-        bgSound.fade(0.3,0,1000);
+        // bgSound.fade(0.3,0,1000);
+        bgSound.stop();
         that.bb.stopTwitterIntegration();
         that.bb.runVideo();
         resolve();
@@ -77,7 +127,7 @@ export default class twitterbubbles {
       
       document.body.onkeyup = function(e) {
         if(e.keyCode === 32) {
-          // get random name @todo
+          
           if(that.bb.twitteranimated) {
             that.addTweet();
           }
@@ -91,9 +141,9 @@ export default class twitterbubbles {
 
       // at the end, run socket listener
 
-      // let socket = io('http://localhost:5000'); // Change to the host and node port
-      let socket = io('https://salty-woodland-56743.herokuapp.com'); // Change to the host and node port
-      socket.emit('hash', {hash:'FByeSuikast4Nisan2015'});
+      let socket = io('http://localhost:5000'); // Change to the host and node port
+      // let socket = io('https://salty-woodland-56743.herokuapp.com'); // Change to the host and node port
+      socket.emit('hash', {hash:'Kane'});
       console.log('connecting');
       socket.on('stream', function(tweet) {
         // TWEET HAPPENED
@@ -102,12 +152,10 @@ export default class twitterbubbles {
         }
         
         console.log('tweet',tweet.name, tweet.username);
-        // addBubble here;
+    
       });
 
 
-      // when we have enough drops
-      // resolve();
     });
   }
   
