@@ -141,9 +141,9 @@ export default class twitterbubbles {
 
       // at the end, run socket listener
 
-      let socket = io('http://localhost:5000'); // Change to the host and node port
-      // let socket = io('https://salty-woodland-56743.herokuapp.com'); // Change to the host and node port
-      socket.emit('hash', {hash:'Kane'});
+      // let socket = io('http://localhost:5000'); // Change to the host and node port
+      let socket = io('https://salty-woodland-56743.herokuapp.com'); // Change to the host and node port
+      socket.emit('hash', {hash:'ReactAmsterdam'});
       console.log('connecting');
       socket.on('stream', function(tweet) {
         // TWEET HAPPENED
