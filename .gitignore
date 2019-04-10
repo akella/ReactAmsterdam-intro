@@ -10,6 +10,7 @@
 *.vi
 *.map
 *~
+twitter-config.json
 
 # OS or Editor folders
 .DS_Store
