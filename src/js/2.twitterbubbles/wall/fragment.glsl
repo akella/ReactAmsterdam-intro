@@ -15,6 +15,7 @@ uniform sampler2D texture;
 uniform sampler2D texture1;
 
 uniform float reveal;
+uniform float opacity;
 varying float rProgress;
 
 
@@ -44,7 +45,7 @@ void main()	{
  //    gl_FragColor = vec4(vRotation);
     gl_FragColor = vec4(vUv,0.,1.);
     gl_FragColor = mix(vec4(0.140, 0.185, 0.198,1.), color1, max(0.1,vProgress));
-    gl_FragColor = mix(gl_FragColor, color, rProgress);
+    gl_FragColor = mix(gl_FragColor, color, rProgress)*opacity;
     // gl_FragColor = reveal;
     // gl_FragColor = vec4(4.*vProgress,4.*vProgress,4.*vProgress,1.);
 }

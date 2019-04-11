@@ -120,7 +120,7 @@ class Sketch {
     this.camera.aspect = w / h;
 
     //this.camera.fov = 2 * Math.atan( 2 / ( 2 * 2.5 ) ) * ( 180 / Math.PI );
-    // this.camera.fov = 2 * Math.atan( ( 2 / this.camera.aspect ) / ( 2 * 2.5 ) ) * ( 180 / Math.PI ); // in degrees
+    this.camera.fov = 4 * Math.atan( ( 2 / this.camera.aspect ) / ( 2 * 2.5 ) ) * ( 180 / Math.PI ); // in degrees
     this.camera.updateProjectionMatrix();
   }
 
@@ -131,7 +131,11 @@ class Sketch {
 
   addWall() {
     this.wall = new Wall();
-    this.scene.add(this.wall.getMesh());
+    this.wall.loadBackground().then(() => {
+      this.scene.add(this.wall.mesh);
+      // let tl = new TimelineMax({onUpdate:() => {console.log(this.wall.mesh.material.uniforms.opacity.value);}});
+      // tl.to(this.wall.mesh.material.uniforms.opacity,5, { value: 1});
+    });
   }
 
   loadFont() {
@@ -468,7 +472,7 @@ class Sketch {
         onComplete: () => {this.startTwitterIntegration();}
       },'-=0.5');
     tl.fromTo(this.tweetPlease, 1, {y:-200,opacity:0},{y:0,opacity:1},0);
-
+    tl.fromTo(this.wall.mesh.material.uniforms.opacity,3,{value:0},{value:1},0);
   }
 
   startTwitterIntegration() {

@@ -10,7 +10,25 @@ export default class Wall {
   	this.scale = 10.5;
   	// this.scale = 2;
   	this.number = 135;
+
+    // return this.loadBackground().then(() => {
+    //   this.getMesh();
+    // });
   }
+
+  loadBackground() {
+    // let that = this;new THREE.TextureLoader().load('img/bg.jpg')
+
+    let that = this;
+    return new Promise(resolve => {
+      this.texture1 = new THREE.TextureLoader().load('img/bg.jpg', resolve);
+      this.getMesh();
+      // smile.magFilter = THREE.NearestFilter;
+      // smile.minFilter = THREE.NearestFilter;
+      // that.smiles.push(smile);
+    });
+  }
+
   getMesh() {
     let number = this.number;
     let z = this.z;
@@ -164,14 +182,16 @@ export default class Wall {
         progress: { type: 'f', value: 0 },
         reveal: { type: 'f', value: 0 },
         offset: { type: 'f', value: 0 },
+        scaleScreen: { type: 'f', value: window.innerWidth/1280 },
         vortex: { type: 'i', value: 0 },
+        opacity: { type: 'f', value: 0 },
         texture: {
           type: 't',
-          value: new THREE.TextureLoader().load('img/video.jpg')
+          value: null
         },
         texture1: {
           type: 't',
-          value: new THREE.TextureLoader().load('img/bg.jpg')
+          value: this.texture1
         },
         // texture1: {type: 't', value: new THREE.TextureLoader().load('img/2.png')},
         // texture2: {type: 't', value: new THREE.TextureLoader().load('img/1.png')},
@@ -187,13 +207,13 @@ export default class Wall {
       flatshading: THREE.FlatShading
     });
 
-    let mesh = new THREE.Mesh(bufGeometry, this.material);
+    this.mesh = new THREE.Mesh(bufGeometry, this.material);
 
     // let meshio = new THREE.Mesh(
     //   new THREE.PlaneBufferGeometry(1,1),
     //   new THREE.MeshBasicMaterial( {color: 0xff0000} )
     // );
-    return mesh;
+    // return mesh;
   }
 
   punch(p) {

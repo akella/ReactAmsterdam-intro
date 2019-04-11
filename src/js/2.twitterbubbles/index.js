@@ -48,31 +48,44 @@ export default class twitterbubbles {
       'danielbayerlein',
       'kentcdodds',
       'ManuelBieh',
-      'pixelscommander',
-      'operatino',
+      'reactjsacademy',
+      'vvikingson',
+      '_maxgallo',
+      'pr0gstar',
+      'wellboy',
+      'schoenwaldnils',
+      'legordey',
+      'emilpersson',
+      'HasuraHQ',
+      'EphemeralCircle',
+      'mrkosima',
+      'ValentinHervieu',
+      'leanjscom',
+      'Codling',
+      'ECODevops',
+      'panay_georgiou',
+      'jjc_uk',
+      'nora_init',
+      'gleb_irovich',
+      'VladimirNovick',
+      'ladyleet',
+      'Kingdutch',
+      'JohanSoulet',
+      'kentcdodds',
+      'nils_we',
+      'harryghazni',
+      'Unicornelia__',
+      'ConfBuddy',
+      'sergioviniciuss',
+      'taym95',
+      'AWlochowitz',
+      'JohanSoulet',
+      'jevakallio',
+      'MBirkhahn',
+      'NearForm',
+      'KendoReact',
       'akella',
       'loveiko',
-      'okonetchnikov',
-      'denysdovhan',
-      'thekitze',
-      'pauloportella_',
-      'ReactAmsterdam',
-      'TejasKumar_',
-      'CrystallizeAPI',
-      'grabbou',
-      'ivanbuncic',
-      'iamsapegin',
-      'carlbergenhem',
-      'cvaneenige',
-      'deutschevita',
-      'briljantmartijn',
-      '4nduril',
-      'httpJunkie',
-      'elibelly',
-      'blv_dmitry',
-      'danielbayerlein',
-      'kentcdodds',
-      'ManuelBieh',
     ];
   }
 
@@ -109,8 +122,8 @@ export default class twitterbubbles {
       that.bb.play();
       setTimeout(() => {that.bb.animateFirst();},1000);
       that.bb.onFinish = () => {
-        // bgSound.fade(0.3,0,1000);
-        bgSound.stop();
+        bgSound.fade(0.3,0,1000);
+        // bgSound.stop();
         that.bb.stopTwitterIntegration();
         that.bb.runVideo();
         resolve();

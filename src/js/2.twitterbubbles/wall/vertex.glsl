@@ -1,5 +1,5 @@
 uniform float time;
-uniform float scale;
+uniform float scaleScreen;
 
 uniform float progress;
 uniform float reveal;
@@ -10,6 +10,7 @@ uniform sampler2D texture2;
 uniform vec2 pixels;
 uniform vec2 uvRate1;
 uniform int vortex;
+uniform float scale;
 
 
 uniform float wTime[10];
@@ -87,7 +88,7 @@ void main() {
   // vUv = uv;
   vec2 _uv = uv - 0.5;
   vUv = _uv;
-  vUv *= vec2(1.,1.77);
+  vUv *= 1.1*scaleScreen*vec2(1.,1.77);
 
   vUv += 0.5;
   // vColor = offset;
